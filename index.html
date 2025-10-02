@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yak's Adventure - 官方介绍</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background-color: #f5f3ef;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* 头部导航 */
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 1rem;
+        }
+        .nav a:hover {
+            color: #f39c12;
+        }
+        /* 英雄区 */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://picsum.photos/id/237/1920/1080") center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 5%;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background-color: #f39c12;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #e67e22;
+        }
+        /* 核心特色区 */
+        .features {
+            padding: 5rem 5%;
+            background-color: white;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #f39c12;
+            margin-bottom: 1.5rem;
+        }
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        /* 玩法说明区 */
+        .how-to-play {
+            padding: 5rem 5%;
+            background-color: #f9f7f5;
+        }
+        .play-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .play-step {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .play-step img {
+            width: 40%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .play-text {
+            width: 60%;
+        }
+        .play-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        /* 停服公告区 */
+        .shutdown {
+            padding: 5rem 5%;
+            background-color: #f8f4f0;
+            text-align: center;
+        }
+        .shutdown-card {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        .shutdown-card h2 {
+            color: #e74c3c;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .shutdown-card p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        .shutdown-card .notice {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-top: 2rem;
+        }
+        /* 页脚 */
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 5%;
+            margin-top: 3rem;
+        }
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .play-step {
+                flex-direction: column;
+            }
+            .play-step img, .play-text {
+                width: 100%;
+            }
+            .nav a {
+                margin-left: 1rem;
+                font-size: 0.9rem;
+            }
+            .shutdown-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="logo">Yak's Adventure</div>
+        <nav class="nav">
+            <a href="#home">首页</a>
+            <a href="#features">核心特色</a>
+            <a href="#how-to-play">玩法说明</a>
+            <a href="#shutdown">服务公告</a>
+        </nav>
+    </header>
+
+    <!-- 英雄区 -->
+    <section class="hero" id="home">
+        <h1>Yak大陆的文字冒险史诗</h1>
+        <p>一款多人在线文字冒险游戏，你将在神秘的Yak大陆创建专属角色，与其他玩家实时互动、共探秘境，每一次文字选择都将改写故事结局。</p>
+        <a href="#shutdown" class="btn">服务说明</a>
+    </section>
+
+    <!-- 核心特色区 -->
+    <section class="features" id="features">
+        <h2 class="section-title">游戏核心特色</h2>
+        <div class="features-container">
+            <div class="feature-card">
+                <<i class="fa-solid fa-users"></</i>
+                <h3>多人实时互动</h3>
+                <p>与全球玩家同步探索Yak大陆，组队破解上古谜题，或在阵营对抗中争夺稀缺资源，文字交流碰撞出无限剧情可能。</p>
+            </div>
+            <div class="feature-card">
+                <<i class="fa-solid fa-feather-pointed"></</i>
+                <h3>文字沉浸叙事</h3>
+                <p>以细腻文字构建雪山、雨林、城邦等6大主题场景，无画面干扰，全凭想象力沉浸于角色成长与世界变迁。</p>
+            </div>
+            <div class="feature-card">
+                <<i class="fa-solid fa-code-fork"></</i>
+                <h3>分支剧情系统</h3>
+                <p>角色职业、对话选择、任务决策均影响故事走向，解锁超过20种结局，每个玩家都能留下独特的Yak大陆印记。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 玩法说明区 -->
+    <section class="how-to-play" id="how-to-play">
+        <h2 class="section-title">快速上手指南</h2>
+        <div class="play-container">
+            <div class="play-step">
+                <img src="https://picsum.photos/id/110/800/500" alt="创建角色">
+                <div class="play-text">
+                    <h3>1. 创建专属角色</h3>
+                    <p>选择职业（探险家/祭司/工匠等）、自定义性格与背景故事，初始属性将随设定生成，影响后续技能解锁方向。</p>
+                </div>
+            </div>
+            <div class="play-step">
+                <div class="play-text">
+                    <h3>2. 文字探索互动</h3>
+                    <p>通过文字指令在地图中移动，与NPC或其他玩家对话触发事件，输入操作指令（如“调查石碑”“与玩家组队”）推进进程。</p>
+                </div>
+                <img src="https://picsum.photos/id/120/800/500" alt="文字互动">
+            </div>
+            <div class="play-step">
+                <img src="https://picsum.photos/id/130/800/500" alt="剧情抉择">
+                <div class="play-text">
+                    <h3>3. 主导剧情走向</h3>
+                    <p>关键节点提供多重选择，例如“帮助村民对抗怪兽”或“与商人交易情报”，不同选择将解锁专属任务线与角色关系。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 停服公告区 -->
+    <section class="shutdown" id="shutdown">
+        <div class="shutdown-card">
+            <h2>【服务调整公告】</h2>
+            <p>亲爱的Yak大陆冒险者们：</p>
+            <p>首先，衷心感谢大家自游戏上线以来的陪伴与支持。我们与各位一同在Yak大陆见证了无数精彩的文字冒险故事，这份回忆尤为珍贵。</p>
+            <p>因平台运营策略调整，我们怀着万分遗憾的心情宣布：《Yak's Adventure》已于2025年■月■日正式停止所有运营服务，服务器已全面关闭，目前无法提供游戏下载及登录服务。</p>
+            <p>对于此次服务调整给大家带来的不便，我们深表歉意。若有相关疑问，可通过官方客服邮箱（■■■■■■■■■■■■■■■■■）咨询，我们将在15个工作日内予以回复。</p>
+            <p class="notice">注：服务器关闭后，所有游戏数据已按规定进行封存处理，感谢每一位玩家在Yak大陆留下的独特印记。</p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 Yak's Adventure 官方网站 | 服务调整公告</p>
+        <p style="margin-top: 1rem;">
+            <a href="#" style="color: #ccc; margin: 0 0.5rem;"><<i class="fa-brands fa-twitter"></</i></a>
+            <a href="#" style="color: #ccc; margin: 0 0.5rem;"><<i class="fa-brands fa-instagram"></</i></a>
+            <a href="#" style="color: #ccc; margin: 0 0.5rem;"><<i class="fa-brands fa-discord"></</i></a>
+        </p>
+    </footer>
+</body>
+</html>
