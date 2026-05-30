@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Yak's Adventure · 梦想大陆</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;image-rendering:pixelated;}
+        body{
+            background: #2d2d2d url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect width="32" height="32" fill="#3c5e3c"/><rect x="0" y="0" width="16" height="16" fill="#4c7a4c"/><rect x="16" y="16" width="16" height="16" fill="#4c7a4c"/></svg>');
+            font-family: 'Press Start 2P', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .minecraft-panel {
+            background: #2b2b2b;
+            border: 4px solid #8b8b8b;
+            box-shadow: inset 0 0 0 2px #4c4c4c, 0 8px 16px rgba(0,0,0,0.5);
+            max-width: 560px;
+            width: 100%;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        h1 { font-size: 1.5rem; color: #e0e0e0; text-shadow: 3px 3px 0 #2c2c2c; margin-bottom: 0.5rem; }
+        .sub { color: #aaa; font-size: 0.55rem; border-bottom: 2px solid #5a5a5a; display: inline-block; padding-bottom: 4px; margin-bottom: 1rem; }
+        .stats { background: #1f1f1f; border: 2px solid #5f5f5f; padding: 10px; margin: 15px 0; display: flex; justify-content: space-between; font-size: 0.65rem; color: #ffd966; }
+        .menu-btn { display: block; width: 90%; margin: 12px auto; background: #6b6b6b; border: 3px solid #a0a0a0; color: #f0f0f0; font-family: 'Press Start 2P', monospace; font-size: 0.7rem; padding: 10px; text-shadow: 2px 2px 0 #2e2e2e; cursor: pointer; transition: 0.05s linear; box-shadow: inset 0 1px 0 #9e9e9e; }
+        .menu-btn:active { transform: translateY(2px); box-shadow: inset 0 2px 0 #6b6b6b; }
+        .upgrade-row { background: #202020; margin: 6px 0; padding: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.55rem; border: 1px solid #5f5f5f; }
+        .upgrade-btn { background: #4c6a4c; border: 2px solid #7a9e7a; padding: 4px 12px; font-family: monospace; font-size: 0.55rem; cursor: pointer; }
+        .exit-btn { background: #6b4c4c; border-color: #a07a7a; }
+        .footer { font-size: 0.45rem; color: #7a7a7a; margin-top: 20px; }
+        .coop-badge { background: #3a5a3a; display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.45rem; margin-left: 8px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+<div class="minecraft-panel">
+    <h1>🏰 Yak's Adventure 🏰</h1>
+    <div class="sub">世界之塔 · 卡牌肉鸽 · 联机合作</div>
+    <div class="stats">
+        <span>✨ 余烬: <span id="emberAmt">0</span></span>
+        <span>🏆 最高层: <span id="maxFloorRec">0</span></span>
+    </div>
+    <div id="permArea"></div>
+    
+    <!-- 单机模式 -->
+    <button class="menu-btn" id="newBtn">🌱 新 冒 险</button>
+    <button class="menu-btn" id="continueBtn">📀 继 续 爬 塔</button>
+    
+    <!-- 联机合作模式 -->
+    <button class="menu-btn" id="coopHostBtn">👑 合作·创建房间</button>
+    <button class="menu-btn" id="coopJoinBtn">👤 合作·加入房间</button>
+    
+    <!-- 隐藏内容 -->
+    <button class="menu-btn" id="secretGateBtn">🔐 隐 藏 之 门</button>
+    <button class="menu-btn" id="archiveBtn">📖 遗 物 图 鉴</button>
+    <button class="menu-btn" id="announcementBtn">📢 更 新 公 告</button>
+    <button class="menu-btn" id="introBtn">🎬 开 场 动 画</button>
+    <button class="menu-btn" id="settingsBtn">⚙️ 设 置</button>
+    <button class="menu-btn exit-btn" id="exitBtn">🚪 退 出</button>
+    
+    <div class="footer">「击败塔层Boss获得余烬，永久强化能力」<br>⚡ 联机模式需双方在同一网络下</div>
+</div>
+<script>
+    (function(){
+        // 全局存档结构
+        let global = { 
+            perm: { ember:0, maxFloor:0, atkUp:0, defUp:0, hpUp:0 }, 
+            secretUnlocked: false, 
+            endings: [] 
+        };
+        
+        function load(){
+            let raw = localStorage.getItem("YakGlobal");
+            if(raw){
+                try{
+                    let d = JSON.parse(raw);
+                    global.perm = d.perm || { ember:0, maxFloor:0, atkUp:0, defUp:0, hpUp:0 };
+                    global.secretUnlocked = d.secretUnlocked || false;
+                    global.endings = d.endings || [];
+                }catch(e){}
+            }
+            save(); render();
+        }
+        function save(){
+            localStorage.setItem("YakGlobal", JSON.stringify({ perm:global.perm, secretUnlocked:global.secretUnlocked, endings:global.endings }));
+        }
+        function render(){
+            document.getElementById("emberAmt").innerText = global.perm.ember;
+            document.getElementById("maxFloorRec").innerText = global.perm.maxFloor;
+            let area = document.getElementById("permArea");
+            area.innerHTML = `
+                <div class="upgrade-row"><span>⚔️ 攻击卡 +${global.perm.atkUp}</span><button class="upgrade-btn" data-up="atk">强化 (10余烬)</button></div>
+                <div class="upgrade-row"><span>🛡️ 防御卡 +${global.perm.defUp}</span><button class="upgrade-btn" data-up="def">强化 (10余烬)</button></div>
+                <div class="upgrade-row"><span>❤️ 初始生命 +${global.perm.hpUp*5}</span><button class="upgrade-btn" data-up="hp">强化 (10余烬)</button></div>
+            `;
+            document.querySelectorAll("[data-up]").forEach(btn=>{
+                btn.onclick = ()=>{
+                    let type = btn.dataset.up;
+                    if(global.perm.ember >= 10){
+                        global.perm.ember -= 10;
+                        if(type==='atk') global.perm.atkUp++;
+                        if(type==='def') global.perm.defUp++;
+                        if(type==='hp') global.perm.hpUp++;
+                        save(); render();
+                    } else alert("余烬不足！");
+                };
+            });
+        }
+        
+        // 新游戏：检查开场动画
+        function newRun(){ 
+            let introPlayed = localStorage.getItem("introPlayed");
+            if(!introPlayed){
+                localStorage.setItem("introPending", "true");
+                window.location.href = "intro.html";
+            } else {
+                localStorage.removeItem("YakRun");
+                window.location.href = "game.html";
+            }
+        }
+        function continueRun(){ window.location.href = "game.html"; }
+        
+        // 隐藏之门（冷日计划）
+        function secretGate(){
+            let key = prompt("请输入隐藏之门的密钥：");
+            if(key === "181"){
+                if(!global.secretUnlocked) global.secretUnlocked = true;
+                save();
+                window.location.href = "secret.html";
+            } else alert("密钥错误");
+        }
+        
+        // 联机合作入口
+        function coopHost(){
+            window.location.href = "host.html";
+        }
+        function coopJoin(){
+            window.location.href = "client.html";
+        }
+        
+        // 其他功能
+        function openArchive(){ window.location.href = "archive.html"; }
+        function openAnnouncement(){ window.location.href = "announcement.html"; }
+        function openIntro(){ window.location.href = "intro.html"; }
+        function openSettings(){ window.location.href = "settings.html"; }
+        function exitGame(){ if(confirm("退出游戏？")) window.close(); }
+        
+        // 绑定事件
+        document.getElementById("newBtn").onclick = newRun;
+        document.getElementById("continueBtn").onclick = continueRun;
+        document.getElementById("secretGateBtn").onclick = secretGate;
+        document.getElementById("coopHostBtn").onclick = coopHost;
+        document.getElementById("coopJoinBtn").onclick = coopJoin;
+        document.getElementById("archiveBtn").onclick = openArchive;
+        document.getElementById("announcementBtn").onclick = openAnnouncement;
+        document.getElementById("introBtn").onclick = openIntro;
+        document.getElementById("settingsBtn").onclick = openSettings;
+        document.getElementById("exitBtn").onclick = exitGame;
+        
+        load();
+    })();
+</script>
+</body>
+</html>

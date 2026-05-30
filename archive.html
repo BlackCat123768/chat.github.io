@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图鉴 · Yak's Adventure</title>
+    <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        }
+        body{background:#1a1a1a;font-family:'Press Start 2P',monospace;color:#ddd;padding:20px;}
+        .container{max-width:700px;margin:0 auto;background:#2b2b2b;border:5px solid #7c7c7c;padding:1.5rem;}
+        h2{border-left:4px solid #ffd966;padding-left:12px;font-size:0.9rem;}
+        .relic-list{display:flex;flex-direction:column;gap:8px;margin:15px 0;}
+        .relic{background:#202020;padding:8px;border:1px solid #5f5f5f;font-size:0.6rem;}
+        button{margin-top:20px;background:#6b6b6b;border:3px solid #a0a0a0;padding:8px;font-family:inherit;font-size:0.6rem;cursor:pointer;color:white;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>📖 遗物图鉴</h2>
+    <div class="relic-list">
+        <div class="relic">⚡ 破碎晶石: 防御+1 (战斗掉落)</div>
+        <div class="relic">🌊 渡河残片: 获得一张额外防御卡</div>
+        <div class="relic">🔥 余烬之心: 主动技能造成真实伤害 (尚未实装)</div>
+        <div class="relic">🔮 冷日余烬: 解锁隐藏主线后获得</div>
+    </div>
+    <h2>🏆 成就</h2>
+    <div id="achievementList">加载中...</div>
+    <button id="backBtn">返回菜单</button>
+</div>
+<script>
+    let raw = localStorage.getItem("YakGlobal");
+    let endings = [];
+    let maxFloor = 0;
+    let runData = localStorage.getItem("YakRun");
+    let maxLevel = 0;
+    if(runData){
+        try{
+            let d = JSON.parse(runData);
+            maxLevel = d.level || 0;
+        }catch(e){}
+    }
+    if(raw){
+        try{
+            let g = JSON.parse(raw);
+            endings = g.endings || [];
+            maxFloor = g.perm?.maxFloor || 0;
+        }catch(e){}
+    }
+    let achHtml = "";
+    if(endings.includes("cold_sun_ending")) achHtml += "<div>✨ 冷日终结者: 完成隐藏主线</div>";
+    else achHtml += "<div>🔒 冷日终结者 (未解锁)</div>";
+    achHtml += `<div>🏔️ 最高抵达章节: ${maxFloor}/3</div>`;
+    achHtml += `<div>⭐ 历史最高等级: ${maxLevel}</div>`;
+    document.getElementById("achievementList").innerHTML = achHtml;
+    document.getElementById("backBtn").onclick = () => window.location.href = "index.html";
+</script>
+</body>
+</html>

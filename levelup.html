@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>属性分配 · Yak's Adventure</title>
+    <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        }
+        body{background:#1a1a1a;font-family:'Press Start 2P',monospace;color:#ddd;padding:20px;}
+        .container{max-width:600px;margin:0 auto;background:#2b2b2b;border:5px solid #7c7c7c;padding:1.5rem;}
+        h2{color:#ffd966;text-align:center;}
+        .stat-row{display:flex;justify-content:space-between;align-items:center;margin:15px 0;padding:10px;background:#202020;border-radius:1rem;}
+        .stat-name{width:100px;}
+        .stat-value{width:60px;text-align:center;}
+        button{background:#2c6b7a;border:2px solid #7acfd9;padding:5px 12px;cursor:pointer;color:white;font-family:monospace;}
+        .point-badge{background:#ffd966;color:#000;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:15px;}
+        .btn-save{margin-top:20px;width:100%;background:#4c6a4c;}
+        .back-btn{margin-top:10px;background:#6b6b6b;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>📈 属性分配</h2>
+    <div class="point-badge" id="pointsLeft">剩余点数: 0</div>
+    <div class="stat-row">
+        <span class="stat-name">⚔️ 力量</span>
+        <span class="stat-value" id="strVal">0</span>
+        <button id="strUp">+</button>
+        <button id="strDown">-</button>
+    </div>
+    <div class="stat-row">
+        <span class="stat-name">❤️ 体质</span>
+        <span class="stat-value" id="conVal">0</span>
+        <button id="conUp">+</button>
+        <button id="conDown">-</button>
+    </div>
+    <div class="stat-row">
+        <span class="stat-name">🌀 灵巧</span>
+        <span class="stat-value" id="dexVal">0</span>
+        <button id="dexUp">+</button>
+        <button id="dexDown">-</button>
+    </div>
+    <button class="btn-save" id="saveBtn">✔ 确认分配</button>
+    <button class="back-btn" id="cancelBtn">返回游戏</button>
+</div>
+<script>
+    let tempStats = { str:0, con:0, dex:0 };
+    let remainingPoints = 0;
+
+    function loadData() {
+        let raw = localStorage.getItem("YakRun");
+        if(raw){
+            try{
+                let d = JSON.parse(raw);
+                tempStats.str = d.attrStr || 0;
+                tempStats.con = d.attrCon || 0;
+                tempStats.dex = d.attrDex || 0;
+                remainingPoints = d.remainingPoints || 0;
+            }catch(e){}
+        } else {
+            tempStats = { str:0, con:0, dex:0 };
+            remainingPoints = 0;
+        }
+        updateUI();
+    }
+
+    function updateUI() {
+        document.getElementById("strVal").innerText = tempStats.str;
+        document.getElementById("conVal").innerText = tempStats.con;
+        document.getElementById("dexVal").innerText = tempStats.dex;
+        document.getElementById("pointsLeft").innerText = `剩余点数: ${remainingPoints}`;
+    }
+
+    function modifyStat(stat, delta) {
+        if(delta > 0 && remainingPoints <= 0) return;
+        if(delta < 0 && tempStats[stat] <= 0) return;
+        tempStats[stat] += delta;
+        remainingPoints -= delta;
+        updateUI();
+    }
+
+    function saveAndReturn() {
+        let raw = localStorage.getItem("YakRun");
+        if(raw){
+            try{
+                let d = JSON.parse(raw);
+                d.attrStr = tempStats.str;
+                d.attrCon = tempStats.con;
+                d.attrDex = tempStats.dex;
+                d.remainingPoints = remainingPoints;
+                localStorage.setItem("YakRun", JSON.stringify(d));
+            }catch(e){}
+        }
+        window.location.href = "game.html";
+    }
+
+    document.getElementById("strUp").onclick = () => modifyStat("str", 1);
+    document.getElementById("strDown").onclick = () => modifyStat("str", -1);
+    document.getElementById("conUp").onclick = () => modifyStat("con", 1);
+    document.getElementById("conDown").onclick = () => modifyStat("con", -1);
+    document.getElementById("dexUp").onclick = () => modifyStat("dex", 1);
+    document.getElementById("dexDown").onclick = () => modifyStat("dex", -1);
+    document.getElementById("saveBtn").onclick = saveAndReturn;
+    document.getElementById("cancelBtn").onclick = () => window.location.href = "game.html";
+
+    loadData();
+</script>
+</body>
+</html>

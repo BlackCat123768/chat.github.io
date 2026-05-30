@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 · Yak's Adventure</title>
+    <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        }
+        body{background:#1a1a1a;font-family:'Press Start 2P',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh;color:#ddd;}
+        .card{background:#2b2b2b;border:5px solid #7c7c7c;padding:2rem;width:400px;text-align:center;}
+        h2{color:#ffd966;margin-bottom:1rem;}
+        .setting-item{display:flex;justify-content:space-between;align-items:center;margin:15px 0;padding:10px;background:#202020;border-radius:1rem;}
+        input{background:#101010;border:2px solid #5f5f5f;padding:8px;color:white;font-family:monospace;width:180px;}
+        button{background:#6b6b6b;border:3px solid #a0a0a0;padding:10px;margin:10px;font-family:inherit;font-size:0.6rem;cursor:pointer;color:white;}
+        button:active{transform:translateY(2px);}
+        .danger{background:#6b4c4c;border-color:#a07a7a;}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>⚙️ 设置</h2>
+    <div class="setting-item">
+        <span>👤 玩家名称</span>
+        <input type="text" id="usernameInput" maxlength="16" placeholder="输入你的名字">
+    </div>
+    <button id="saveUsernameBtn">💾 保存名称</button>
+    <button id="resetAllBtn" class="danger">🗑️ 重置全部进度</button>
+    <button id="backBtn">◀ 返回</button>
+</div>
+<script>
+    function loadUsername() {
+        let name = localStorage.getItem("yakUsername");
+        if(name) document.getElementById("usernameInput").value = name;
+        else document.getElementById("usernameInput").value = "冒险者";
+    }
+    document.getElementById("saveUsernameBtn").onclick = () => {
+        let name = document.getElementById("usernameInput").value.trim();
+        if(name === "") name = "冒险者";
+        localStorage.setItem("yakUsername", name);
+        alert("名称已保存！");
+    };
+    document.getElementById("resetAllBtn").onclick = () => {
+        if(confirm("清除所有存档、永久强化、结局记录？")){
+            localStorage.removeItem("YakGlobal");
+            localStorage.removeItem("YakRun");
+            localStorage.removeItem("ColdSunSave");
+            localStorage.removeItem("introPlayed");
+            localStorage.removeItem("yakUsername");
+            alert("已重置");
+            window.location.href = "index.html";
+        }
+    };
+    document.getElementById("backBtn").onclick = () => window.location.href = "index.html";
+    loadUsername();
+</script>
+</body>
+</html>

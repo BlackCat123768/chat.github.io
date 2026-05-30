@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新公告 · Yak's Adventure</title>
+    <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        }
+        body{background:#1a1a1a;font-family:'Press Start 2P',monospace;color:#ddd;padding:20px;}
+        .container{max-width:800px;margin:0 auto;background:#2b2b2b;border:5px solid #7c7c7c;padding:1.5rem;}
+        h1{color:#ffd966;text-align:center;margin-bottom:1rem;}
+        .version{color:#7acfd9;text-align:center;margin-bottom:2rem;}
+        .update-item{margin:15px 0;padding:10px;border-left:4px solid #ffd966;background:#202020;}
+        .update-date{font-size:0.6rem;color:#aaa;}
+        button{margin-top:20px;background:#6b6b6b;border:3px solid #a0a0a0;padding:10px;font-family:inherit;cursor:pointer;color:white;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📢 更新公告</h1>
+    <div class="version">版本 v2.0.0 「命运之轮」</div>
+    <div class="update-item">
+        <div class="update-date">2025-05-28</div>
+        <div>✨ 新增等级与属性点系统（力量/体质/灵巧）</div>
+        <div>✨ 优化战斗机制，怪物拥有多阶段技能池</div>
+        <div>✨ 新增开场动画，新游戏强制播放</div>
+        <div>✨ 新增更新公告功能</div>
+        <div>⚙️ 调整卡牌平衡：铁壁格挡提升至20</div>
+        <div>🐛 修复冷日计划战斗无法加载的问题</div>
+        <div>🔗 联机合作模式开启测试（局域网）</div>
+    </div>
+    <div class="update-item">
+        <div class="update-date">2025-05-20</div>
+        <div>🎉 首个版本发布，包含爬塔肉鸽与冷日计划隐藏主线</div>
+    </div>
+    <button id="backBtn">返回主菜单</button>
+</div>
+<script>
+    document.getElementById("backBtn").onclick = () => window.location.href = "index.html";
+</script>
+</body>
+</html>

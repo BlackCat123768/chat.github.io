@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>战斗 · 冷日回响</title>
+    <style>
+        /* 复用原有的 game.html 中的战斗样式，精简后只保留战斗必需 */
+        *{box-sizing:border-box;}
+        body{
+            background: #0a0f1a;
+            font-family: 'Press Start 2P', monospace;
+            padding: 20px;
+            color: #d4f1f9;
+            margin: 0;
+        }
+        .battle-panel {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #0b1a22dd;
+            border: 3px solid #5f9ea0;
+            border-radius: 2rem;
+            padding: 20px;
+        }
+        .status-bar {
+            background: #041016;
+            padding: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 0.55rem;
+            margin-bottom: 20px;
+            border-radius: 1rem;
+        }
+        .enemies-container { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
+        .enemy-card {
+            background: #1a2f36;
+            border: 2px solid #4c9ead;
+            padding: 12px;
+            width: 200px;
+            text-align: center;
+            border-radius: 1rem;
+        }
+        .enemy-card.selected { border: 3px solid #ffd966; background: #2a4f5a; }
+        .health-bar-sm {
+            background: #3a1a1a;
+            height: 8px;
+            width: 100%;
+            margin: 6px 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .health-fill-sm { background: #c44; height: 100%; width: 100%; }
+        .player-area {
+            background: #1a2f36;
+            border: 2px solid #4c9ead;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 1rem;
+        }
+        .card-hand {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .card {
+            background: #3c5c66;
+            border: 3px solid #89cedf;
+            width: 110px;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.55rem;
+            border-radius: 1rem;
+        }
+        .card:active { transform: translateY(2px); }
+        .card.disabled { opacity: 0.5; cursor: not-allowed; }
+        .energy { font-size: 1rem; color: #ffd966; text-align: center; margin: 10px 0; }
+        .log-area {
+            background: #010a0e;
+            padding: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.5rem;
+            margin-top: 20px;
+            border-radius: 1rem;
+        }
+        .log-entry { border-bottom: 1px solid #2c5f66; padding: 4px 0; }
+        .minecraft-btn {
+            background: #2c6b7a;
+            border: 2px solid #7acfd9;
+            color: white;
+            font-family: monospace;
+            font-size: 0.55rem;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 5px;
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="battle-panel">
+    <div class="status-bar">
+        <span>❤️ <span id="hpVal">0</span>/<span id="maxHpVal">0</span></span>
+        <span>🛡️ 格挡 <span id="blockVal">0</span></span>
+        <span>💪 力量 <span id="strengthVal">0</span></span>
+        <span>💰 <span id="goldVal">0</span></span>
+        <span>✨ 余烬: <span id="emberVal">0</span></span>
+    </div>
+    <div class="enemies-container" id="enemiesContainer"></div>
+    <div class="player-area">
+        <div class="energy">⚡ 能量: <span id="energyVal">0</span>/3</div>
+        <div class="card-hand" id="handCards"></div>
+        <div style="display:flex; justify-content:center; gap:10px;">
+            <div class="minecraft-btn" id="endTurnBtn">🔚 结束回合</div>
+            <div class="minecraft-btn" id="surrenderBtn">🏳️ 投降</div>
+        </div>
+    </div>
+    <div class="log-area" id="logArea"><div class="log-entry">⚔️ 战斗载入...</div></div>
+</div>
+<script src="gameData.js"></script>
+<script src="battleMain.js"></script>
+</body>
+</html>
